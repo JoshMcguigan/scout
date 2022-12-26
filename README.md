@@ -2,27 +2,6 @@
 
 Scout is an exploration of using Rust in the development of flight control software.
 
-## Setup
-
-The scout prototype software runs on a Nucleo F446RE development board.
-
-## Usage
-
-#### Run
-
-`cargo run`
-
-#### Flash
-
-`cargo flash --chip STM32F446RETx`
-
-#### Debug
-
-* `openocd`
-* `arm-none-eabi-gdb target/thumbv4em-none-eabihf/debug/nucleo-f446re-embassy`
-* `target remote :3333`
-* `load`
-
 ## License
 
 Licensed under either of

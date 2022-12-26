@@ -18,8 +18,7 @@ use static_cell::StaticCell;
 
 use panic_probe as _;
 
-mod drivers;
-use drivers::radio::SymaX5C;
+use scout_nrf24l01::SymaX5C;
 
 type SpiBus1 = embassy_stm32::spi::Spi<'static, SPI1, DMA2_CH3, DMA2_CH0>;
 static SPI_BUS: StaticCell<Mutex<ThreadModeRawMutex, SpiBus1>> = StaticCell::new();

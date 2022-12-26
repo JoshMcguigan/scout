@@ -47,11 +47,11 @@ where
         config_update: config_register_write::ConfigRegisterWrite,
     ) -> Result<(), TransferError<<SPI as spi::ErrorType>::Error, <CE as digital::ErrorType>::Error>>
     {
-        let current_config = self.read_register(Register::CONFIG).await?;
+        let current_config = self.read_register(Register::Config).await?;
 
         let new_config = config_update.apply_on_top_of(current_config);
 
-        self.write_register(Register::CONFIG, new_config).await?;
+        self.write_register(Register::Config, new_config).await?;
 
         Ok(())
     }
@@ -62,7 +62,7 @@ where
     ) -> Result<(), TransferError<<SPI as spi::ErrorType>::Error, <CE as digital::ErrorType>::Error>>
     {
         self.write_register(
-            Register::EN_AA,
+            Register::EnAA,
             if auto_ack_setting {
                 0b0011_1111
             } else {
@@ -82,7 +82,7 @@ where
     {
         assert!(channel <= 5);
 
-        self.write_register(Register::EN_RXADDR, 1u8 << channel)
+        self.write_register(Register::EnRxAddr, 1u8 << channel)
             .await?;
 
         Ok(())
@@ -94,7 +94,7 @@ where
         desired_register_value: u8,
     ) -> Result<(), TransferError<<SPI as spi::ErrorType>::Error, <CE as digital::ErrorType>::Error>>
     {
-        self.write_register(Register::RF_SETUP, desired_register_value)
+        self.write_register(Register::RfSetup, desired_register_value)
             .await?;
 
         Ok(())
@@ -106,7 +106,7 @@ where
     ) -> Result<(), TransferError<<SPI as spi::ErrorType>::Error, <CE as digital::ErrorType>::Error>>
     {
         assert!(rx_addr.len() <= 5);
-        self.write_register_multi(Register::RX_ADDR_P0, rx_addr)
+        self.write_register_multi(Register::RxAddrP0, rx_addr)
             .await?;
 
         Ok(())
@@ -117,7 +117,7 @@ where
         channel: u8,
     ) -> Result<(), TransferError<<SPI as spi::ErrorType>::Error, <CE as digital::ErrorType>::Error>>
     {
-        self.write_register(Register::RF_CH, channel).await?;
+        self.write_register(Register::RfCh, channel).await?;
 
         Ok(())
     }
@@ -127,8 +127,7 @@ where
         payload_size: u8,
     ) -> Result<(), TransferError<<SPI as spi::ErrorType>::Error, <CE as digital::ErrorType>::Error>>
     {
-        self.write_register(Register::RX_PW_P0, payload_size)
-            .await?;
+        self.write_register(Register::RxPwP0, payload_size).await?;
 
         Ok(())
     }
@@ -140,7 +139,7 @@ where
         bool,
         TransferError<<SPI as spi::ErrorType>::Error, <CE as digital::ErrorType>::Error>,
     > {
-        if (self.read_register(Register::FIFO_STATUS).await? & 0b0000_0001) == 0 {
+        if (self.read_register(Register::FifoStatus).await? & 0b0000_0001) == 0 {
             // RX queue not empty, so we read from it
 
             transaction!(&mut self.spi, move |bus| async move {
@@ -283,32 +282,32 @@ pub mod config_register_write {
 #[allow(dead_code, non_camel_case_types, clippy::upper_case_acronyms)]
 #[derive(Clone, Copy)]
 pub(crate) enum Register {
-    CONFIG = 0x0,
-    EN_AA = 0x1,
-    EN_RXADDR = 0x2,
-    SETUP_AW = 0x3,
-    SETUP_RETR = 0x4,
-    RF_CH = 0x5,
-    RF_SETUP = 0x6,
-    STATUS = 0x7,
-    OBSERVE_TX = 0x8,
-    CD = 0x9,
-    RX_ADDR_P0 = 0xa,
-    RX_ADDR_P1 = 0xb,
-    RX_ADDR_P2 = 0xc,
-    RX_ADDR_P3 = 0xd,
-    RX_ADDR_P4 = 0xe,
-    RX_ADDR_P5 = 0xf,
-    TX_ADDR = 0x10,
-    RX_PW_P0 = 0x11,
-    RX_PW_P1 = 0x12,
-    RX_PW_P2 = 0x13,
-    RX_PW_P3 = 0x14,
-    RX_PW_P4 = 0x15,
-    RX_PW_P5 = 0x16,
-    FIFO_STATUS = 0x17,
-    DYNPD = 0x1c,
-    FEATURE = 0x1d,
+    Config = 0x0,
+    EnAA = 0x1,
+    EnRxAddr = 0x2,
+    SetupAw = 0x3,
+    SetupRetr = 0x4,
+    RfCh = 0x5,
+    RfSetup = 0x6,
+    Status = 0x7,
+    ObserveTx = 0x8,
+    Cd = 0x9,
+    RxAddrP0 = 0xa,
+    RxAddrP1 = 0xb,
+    RxAddrP2 = 0xc,
+    RxAddrP3 = 0xd,
+    RxAddrP4 = 0xe,
+    RxAddrP5 = 0xf,
+    TxAddr = 0x10,
+    RxPwP0 = 0x11,
+    RxPwP1 = 0x12,
+    RxPwP2 = 0x13,
+    RxPwP3 = 0x14,
+    RxPwP4 = 0x15,
+    RxPwP5 = 0x16,
+    FifoStatus = 0x17,
+    Dynpd = 0x1c,
+    Feature = 0x1d,
 }
 
 impl Register {
