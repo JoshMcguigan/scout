@@ -1,0 +1,19 @@
+[package]
+name = "scout-nrf24l01"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+embedded-hal = "1.0.0-alpha.9"
+embedded-hal-async = "=0.2.0-alpha.0"
+embassy-embedded-hal = { version = "0.1.0", git = "https://github.com/embassy-rs/embassy" }
+
+defmt = "0.3"
+defmt-rtt = "0.4"
+
+[features]
+default = [
+  "defmt-default",
+]
+
+defmt-default = []

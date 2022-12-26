@@ -933,7 +933,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
 
 [[package]]
-name = "scout"
+name = "scout-fc"
 version = "0.1.0"
 dependencies = [
  "cortex-m",
@@ -945,10 +945,20 @@ dependencies = [
  "embassy-stm32",
  "embassy-sync",
  "embassy-time",
+ "panic-probe",
+ "scout-nrf24l01",
+ "static_cell",
+]
+
+[[package]]
+name = "scout-nrf24l01"
+version = "0.1.0"
+dependencies = [
+ "defmt",
+ "defmt-rtt",
+ "embassy-embedded-hal",
  "embedded-hal 1.0.0-alpha.9",
  "embedded-hal-async",
- "panic-probe",
- "static_cell",
 ]
 
 [[package]]
