@@ -26,6 +26,8 @@ embassy-time = { version = "0.1.0", git = "https://github.com/embassy-rs/embassy
 embassy-stm32 = { version = "0.1.0", git = "https://github.com/embassy-rs/embassy", features = ["nightly", "unstable-traits", "defmt", "stm32f031c6", "time-driver-any", "exti"]  }
 embassy-embedded-hal = { version = "0.1.0", git = "https://github.com/embassy-rs/embassy" }
 
+scout-st-spin-32  = { path = "../drivers/scout-st-spin-32" }
+
 [features]
 default = [
   "defmt-default",

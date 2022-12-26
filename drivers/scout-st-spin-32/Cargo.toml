@@ -1,0 +1,7 @@
+[package]
+name = "scout-st-spin-32"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+embassy-stm32 = { version = "0.1.0", git = "https://github.com/embassy-rs/embassy", features = ["stm32f031c6"]  }

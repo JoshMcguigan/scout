@@ -946,6 +946,14 @@ dependencies = [
  "embassy-sync",
  "embassy-time",
  "panic-probe",
+ "scout-st-spin-32",
+]
+
+[[package]]
+name = "scout-st-spin-32"
+version = "0.1.0"
+dependencies = [
+ "embassy-stm32",
 ]
 
 [[package]]
