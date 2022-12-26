@@ -19,6 +19,6 @@ Ensure you run the commands below from the `scout-fc` directory.
 #### Debug
 
 * `openocd`
-* `arm-none-eabi-gdb ../target/thumbv7em-none-eabihf/debug/scout-fc`
+* `arm-none-eabi-gdb target/thumbv7em-none-eabihf/debug/scout-fc`
 * `target remote :3333`
 * `load`

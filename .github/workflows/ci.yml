@@ -15,3 +15,34 @@ jobs:
       run: cargo clippy --all-features -- -D warnings
     - name: Format
       run: cargo fmt --all -- --check
+
+  build_esc:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: cd
+      run: cd scout-esc
+    - name: Build
+      run: cargo build
+    - name: Clippy
+      run: cargo clippy --all-features -- -D warnings
+    - name: Format
+      run: cargo fmt --all -- --check
+
+
+  build_fc:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: cd
+      run: cd scout-fc
+    - name: Build
+      run: cargo build
+    - name: Clippy
+      run: cargo clippy --all-features -- -D warnings
+    - name: Format
+      run: cargo fmt --all -- --check

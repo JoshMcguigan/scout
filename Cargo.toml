@@ -2,5 +2,13 @@
 
 members = [
   "drivers/*",
+]
+
+# Binary crates are excluded from the workspace, because otherwise they try
+# to share dependencies. This creates problems when cargo combines features
+# across crates which target different MCUs, because the embassy-stm32 crate
+# does not support having multiple MCU features enabled at once.
+exclude = [
+  "scout-esc",
   "scout-fc",
 ]

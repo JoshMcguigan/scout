@@ -1,0 +1,9 @@
+[profile.dev]
+# Non optimized builds can cause time deadline misses on embedded targets.
+opt-level = 3
+
+[build]
+target = "thumbv7em-none-eabihf"
+
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+runner = "probe-run --chip STM32F031C6Tx"
