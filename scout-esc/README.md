@@ -19,6 +19,6 @@ Ensure you run the commands below from the `scout-esc` directory.
 #### Debug
 
 * `openocd`
-* `arm-none-eabi-gdb target/thumbv7em-none-eabihf/debug/scout-esc`
+* `arm-none-eabi-gdb target/thumbv6m-none-eabi/debug/scout-esc`
 * `target remote :3333`
 * `load`

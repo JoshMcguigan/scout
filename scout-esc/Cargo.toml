@@ -4,7 +4,7 @@ cargo-features = ["per-package-target"]
 name = "scout-esc"
 version = "0.1.0"
 edition = "2021"
-default-target = "thumbv7em-none-eabihf"
+default-target = "thumbv6m-none-eabi"
 
 [dependencies]
 cortex-m = { version = "0.7.6", features = ["critical-section-single-core"] }
