@@ -19,11 +19,12 @@ jobs:
   build_esc:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scout-esc
 
     steps:
     - uses: actions/checkout@v1
-    - name: cd
-      run: cd scout-esc
     - name: Build
       run: cargo build
     - name: Clippy
@@ -35,11 +36,12 @@ jobs:
   build_fc:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scout-fc
 
     steps:
     - uses: actions/checkout@v1
-    - name: cd
-      run: cd scout-fc
     - name: Build
       run: cargo build
     - name: Clippy

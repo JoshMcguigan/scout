@@ -1,6 +1,7 @@
 [profile.dev]
 # Non optimized builds can cause time deadline misses on embedded targets.
 opt-level = 3
+overflow-checks = false
 
 [build]
 target = "thumbv6m-none-eabi"

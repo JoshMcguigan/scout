@@ -1,4 +1,9 @@
-use embassy_stm32::gpio::{Input, Level, Output, Pull, Speed};
+use embassy_stm32::{
+    gpio::{Input, Level, Output, Pull, Speed},
+    pwm::simple_pwm::{PwmPin, SimplePwm},
+    time::Hertz,
+    Config,
+};
 
 #[allow(non_snake_case)]
 pub struct Peripherals {
@@ -19,16 +24,21 @@ pub struct Peripherals {
     pub PB6: embassy_stm32::peripherals::PB6,
     pub PB7: embassy_stm32::peripherals::PB7,
 
+    pub EXTI0: embassy_stm32::peripherals::EXTI0,
+    pub EXTI1: embassy_stm32::peripherals::EXTI1,
+
     pub over_current_protection: OverCurrentProtection,
     pub OC_COMP_INT: Input<'static, embassy_stm32::peripherals::PB12>,
     pub OC_COMP_INT2: Input<'static, embassy_stm32::peripherals::PA12>,
 
-    pub LS1: Output<'static, embassy_stm32::peripherals::PB13>,
-    pub LS2: Output<'static, embassy_stm32::peripherals::PB14>,
-    pub LS3: Output<'static, embassy_stm32::peripherals::PB15>,
-    pub HS1: Output<'static, embassy_stm32::peripherals::PA8>,
-    pub HS2: Output<'static, embassy_stm32::peripherals::PA9>,
-    pub HS3: Output<'static, embassy_stm32::peripherals::PA10>,
+    /// High side outputs
+    pub hs: SimplePwm<'static, embassy_stm32::peripherals::TIM1>,
+    /// Low side output 1
+    pub ls1: Output<'static, embassy_stm32::peripherals::PB13>,
+    /// Low side output 2
+    pub ls2: Output<'static, embassy_stm32::peripherals::PB14>,
+    /// Low side output 3
+    pub ls3: Output<'static, embassy_stm32::peripherals::PB15>,
 
     pub ADC: embassy_stm32::peripherals::ADC,
 }
@@ -55,7 +65,19 @@ pub enum OverCurrentThreshold {
 }
 
 pub fn init() -> Peripherals {
-    let p = embassy_stm32::init(Default::default());
+    let config = {
+        let mut c = Config::default();
+        c.rcc.sys_ck = Some(Hertz::mhz(48));
+        c
+    };
+    let p = embassy_stm32::init(config);
+
+    let hs1 = PwmPin::new_ch1(p.PA8);
+    let hs2 = PwmPin::new_ch2(p.PA9);
+    let hs3 = PwmPin::new_ch3(p.PA10);
+    let ls1 = Output::new(p.PB13, Level::Low, Speed::VeryHigh);
+    let ls2 = Output::new(p.PB14, Level::Low, Speed::VeryHigh);
+    let ls3 = Output::new(p.PB15, Level::Low, Speed::VeryHigh);
 
     Peripherals {
         PF0: p.PF0,
@@ -75,16 +97,24 @@ pub fn init() -> Peripherals {
         PB6: p.PB6,
         PB7: p.PB7,
 
+        EXTI0: p.EXTI0,
+        EXTI1: p.EXTI1,
+
         over_current_protection: OverCurrentProtection::init(p.PA11, p.PF6, p.PF7),
         OC_COMP_INT: Input::new(p.PB12, Pull::None),
         OC_COMP_INT2: Input::new(p.PA12, Pull::None),
 
-        LS1: Output::new(p.PB13, Level::Low, Speed::VeryHigh),
-        LS2: Output::new(p.PB14, Level::Low, Speed::VeryHigh),
-        LS3: Output::new(p.PB15, Level::Low, Speed::VeryHigh),
-        HS1: Output::new(p.PA8, Level::Low, Speed::VeryHigh),
-        HS2: Output::new(p.PA9, Level::Low, Speed::VeryHigh),
-        HS3: Output::new(p.PA10, Level::Low, Speed::VeryHigh),
+        hs: SimplePwm::new(
+            p.TIM1,
+            Some(hs1),
+            Some(hs2),
+            Some(hs3),
+            None,
+            Hertz::khz(10),
+        ),
+        ls1,
+        ls2,
+        ls3,
 
         ADC: p.ADC,
     }
