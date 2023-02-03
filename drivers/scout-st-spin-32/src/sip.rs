@@ -1,5 +1,5 @@
 use embassy_stm32::{
-    gpio::{Input, Level, Output, Pull, Speed},
+    gpio::{AnyPin, Input, Level, Output, Pin, Pull, Speed},
     pwm::simple_pwm::{PwmPin, SimplePwm},
     time::Hertz,
     Config,
@@ -34,11 +34,11 @@ pub struct Peripherals {
     /// High side outputs
     pub hs: SimplePwm<'static, embassy_stm32::peripherals::TIM1>,
     /// Low side output 1
-    pub ls1: Output<'static, embassy_stm32::peripherals::PB13>,
+    pub ls1: Output<'static, AnyPin>,
     /// Low side output 2
-    pub ls2: Output<'static, embassy_stm32::peripherals::PB14>,
+    pub ls2: Output<'static, AnyPin>,
     /// Low side output 3
-    pub ls3: Output<'static, embassy_stm32::peripherals::PB15>,
+    pub ls3: Output<'static, AnyPin>,
 
     pub ADC: embassy_stm32::peripherals::ADC,
 }
@@ -75,9 +75,9 @@ pub fn init() -> Peripherals {
     let hs1 = PwmPin::new_ch1(p.PA8);
     let hs2 = PwmPin::new_ch2(p.PA9);
     let hs3 = PwmPin::new_ch3(p.PA10);
-    let ls1 = Output::new(p.PB13, Level::Low, Speed::VeryHigh);
-    let ls2 = Output::new(p.PB14, Level::Low, Speed::VeryHigh);
-    let ls3 = Output::new(p.PB15, Level::Low, Speed::VeryHigh);
+    let ls1 = Output::new(p.PB13.degrade(), Level::Low, Speed::VeryHigh);
+    let ls2 = Output::new(p.PB14.degrade(), Level::Low, Speed::VeryHigh);
+    let ls3 = Output::new(p.PB15.degrade(), Level::Low, Speed::VeryHigh);
 
     Peripherals {
         PF0: p.PF0,
