@@ -60,21 +60,25 @@ async fn main(_spawner: Spawner) {
     let Peripherals {
         mut over_current_protection,
         mut hs,
-        mut ls1,
-        mut ls2,
-        mut ls3,
+        ls1,
+        ls2,
+        ls3,
         BEMF_COMPARATOR_1: bemf_comparator_1,
         BEMF_COMPARATOR_2: bemf_comparator_2,
         BEMF_COMPARATOR_3: bemf_comparator_3,
         ..
     } = scout_st_spin_32::bsp::steval_esc002v1::init();
 
+    let mut ls1 = ls1.degrade();
+    let mut ls2 = ls2.degrade();
+    let mut ls3 = ls3.degrade();
+
     // Safety: These are only read from an interrupt which isn't enabled yet, so
     // they are safe to write to.
     unsafe {
-        BEMF_COMPARATOR_1 = Some(bemf_comparator_1);
-        BEMF_COMPARATOR_2 = Some(bemf_comparator_2);
-        BEMF_COMPARATOR_3 = Some(bemf_comparator_3);
+        BEMF_COMPARATOR_1 = Some(bemf_comparator_1.degrade());
+        BEMF_COMPARATOR_2 = Some(bemf_comparator_2.degrade());
+        BEMF_COMPARATOR_3 = Some(bemf_comparator_3.degrade());
     }
 
     over_current_protection.configure_threshold(OverCurrentThreshold::Amps500);
