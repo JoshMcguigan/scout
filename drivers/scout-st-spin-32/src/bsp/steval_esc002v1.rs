@@ -1,5 +1,5 @@
 use embassy_stm32::{
-    gpio::{Input, Level, Output, Pull, Speed},
+    gpio::{AnyPin, Input, Level, Output, Pin, Pull, Speed},
     pwm::simple_pwm::SimplePwm,
 };
 
@@ -30,18 +30,18 @@ pub struct Peripherals {
     ///
     /// On the cycle after the low side is disabled, wait for bemf input to go high.
     /// On the cycle after the high side is disabled, wait for the bemf input to go low.
-    pub BEMF_COMPARATOR_1: Input<'static, embassy_stm32::peripherals::PF1>,
-    pub BEMF_COMPARATOR_2: Input<'static, embassy_stm32::peripherals::PF0>,
-    pub BEMF_COMPARATOR_3: Input<'static, embassy_stm32::peripherals::PB1>,
+    pub BEMF_COMPARATOR_1: Input<'static, AnyPin>,
+    pub BEMF_COMPARATOR_2: Input<'static, AnyPin>,
+    pub BEMF_COMPARATOR_3: Input<'static, AnyPin>,
 
     /// High side outputs
     pub hs: SimplePwm<'static, embassy_stm32::peripherals::TIM1>,
     /// Low side output 1
-    pub ls1: Output<'static, embassy_stm32::peripherals::PB13>,
+    pub ls1: Output<'static, AnyPin>,
     /// Low side output 2
-    pub ls2: Output<'static, embassy_stm32::peripherals::PB14>,
+    pub ls2: Output<'static, AnyPin>,
     /// Low side output 3
-    pub ls3: Output<'static, embassy_stm32::peripherals::PB15>,
+    pub ls3: Output<'static, AnyPin>,
 
     // LED control is inverted. Setting the output LOW turns on the LED.
     pub RGB_LED_RED: Output<'static, embassy_stm32::peripherals::PA0>,
@@ -90,9 +90,9 @@ pub fn init() -> Peripherals {
         OC_COMP_INT: p.OC_COMP_INT,
         OC_COMP_INT2: p.OC_COMP_INT2,
 
-        BEMF_COMPARATOR_1: Input::new(p.PF1, Pull::None),
-        BEMF_COMPARATOR_2: Input::new(p.PF0, Pull::None),
-        BEMF_COMPARATOR_3: Input::new(p.PB1, Pull::None),
+        BEMF_COMPARATOR_1: Input::new(p.PF1.degrade(), Pull::None),
+        BEMF_COMPARATOR_2: Input::new(p.PF0.degrade(), Pull::None),
+        BEMF_COMPARATOR_3: Input::new(p.PB1.degrade(), Pull::None),
 
         hs: p.hs,
         ls1: p.ls1,
